@@ -62,12 +62,30 @@
       background:black;
       position: absolute;
       top:50%;
+      transform-origin: 100% 50%;
     }
 
   </style>
 
   <script>
 
+    let hourHand                = document.querySelector('.hour-hand');
+    let minutesHand             = document.querySelector('.min-hand');
+    let secondsHand             = document.querySelector('.second-hand');
+    let degreeMinSecFraction    = 6;
+    let degreeHourFraction      = 30;
+
+    function getCurrentTime() {
+        let now = new Date();
+        
+        hourHand.style.transform = `rotate(${90 + (now.getHours() * degreeHourFraction)}deg)`;
+        minutesHand.style.transform = `rotate(${90 + (now.getMinutes() * degreeMinSecFraction)}deg)`;
+        secondsHand.style.transform = `rotate(${90 + (now.getSeconds() * degreeMinSecFraction)}deg)`;
+    }
+
+    setInterval(() => {
+        getCurrentTime();
+    }, 1000);
 
   </script>
 </body>
