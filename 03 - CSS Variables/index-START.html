@@ -18,9 +18,24 @@
     <input id="base" type="color" name="base" value="#ffc600">
   </div>
 
-  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+  <img src="img/image.jpg">
 
   <style>
+
+    /*variables*/
+    body {
+      --blur: 5px;
+      --spacing: 1px;
+      --base: #fff;
+    }
+    
+
+    img {
+      filter: blur(var(--blur));
+      border: var(--spacing) solid var(--base);
+      padding: var(--spacing);
+      background: var(--base);
+    }
 
     /*
       misc styles, nothing to do with CSS variables
@@ -45,6 +60,32 @@
   </style>
 
   <script>
+
+    //get inputs and set variables
+    const body          = document.querySelector('body');
+    const spacingInput  = document.querySelector('#spacing'); 
+    const blurInput     = document.querySelector('#blur');
+    const baseInput     = document.querySelector('#base');
+
+    //start values
+    body.style.setProperty('--spacing', spacingInput.value);
+    body.style.setProperty('--spacing', spacingInput.value);
+    body.style.setProperty('--base', baseInput.value);
+
+    //create functions to update the values  
+    function updateValue(event) {
+      
+      let newValue = event.target.value;
+
+      if(event.target.dataset.sizing) newValue = `${newValue}${event.target.dataset.sizing}`;
+
+      body.style.setProperty('--' + event.target.id, newValue);
+    }
+
+    //add Eventlisteners,
+    spacingInput.addEventListener('input', updateValue);
+    blurInput.addEventListener('input', updateValue);
+    baseInput.addEventListener('input', updateValue);
   </script>
 
 </body>
