@@ -8,15 +8,53 @@
 <body>
 
   <form class="search-form">
-    <input type="text" class="search" placeholder="City or State">
+    <input type="text" class="search" placeholder="City or State" oninput="onFilter(event)">
     <ul class="suggestions">
       <li>Filter for a city</li>
       <li>or a state</li>
     </ul>
   </form>
+
 <script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+    
+  const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+  let cities = [];
+
+  const filterCities = input => {
+    const regexp = new RegExp(input, 'gi');
+    return cities.filter(city => city.city.match(regexp) || city.state.match(regexp));
+  };
+
+  const mountCities = (cities, input) => {
+    const regexp = new RegExp(input, 'gi');
+    
+    document.querySelector('.suggestions').innerHTML = cities
+        .map(city => {
+            const cityName = city.city.replace(regexp, `<span class="h1">${input}</span>`);
+            return `
+                <li>${cityName}, ${city.state.replace(regexp, `<span class="h1">${input}</span>`)}
+                    <span class="population">${city.population}</span>
+                </li>
+            `
+        })
+        .join('');
+  };
+
+  fetch(endpoint)
+    .then(blob => blob.json())
+    .then(data => {
+      cities = data;
+    });
+
+  function onFilter(event) {
+    filteredCities = event.target.value !== ''
+      ? filterCities(event.target.value)
+      : cities;
+
+    mountCities(filteredCities, event.target.value);
+  }
 
 </script>
-  </body>
+</body>
 </html>
